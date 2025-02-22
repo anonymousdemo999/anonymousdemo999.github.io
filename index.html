@@ -1,12 +1,458 @@
 <!DOCTYPE html>
- <html>
- 
- <head>
- <meta charset="UTF-8">
- <title>Hello world</title>
- </head>
- 
-<body>
-    Hello world
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>This folder primarily contains auxiliary materials for our paper</title>
+ <style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center; /* 让所有单元格的内容居中 */
+  }
+
+  th, td {
+    border: 1px solid #ccc; /* 灰色的竖线 */
+    padding: 8px;
+  }
+
+  th {
+    background-color: #f9f9f9;
+  }
+
+  audio {
+    width: 130px;
+  }
+  .no-border td:empty {
+    border: none !important;
+  }
+  .authorcenter {
+    text-align: center; /* 将 h2 文本居中 */
+  }
+  .abstract {
+    padding: 30px; /* 将 h2 文本居中 */
+    word-wrap: break-word; /* 让长单词换行 */
+  }
+  .center {
+    text-align: center; /* 将 h2 文本居中 */
+    box-shadow: 5px 5px 5px rgba(225, 224, 224, 0.95); /* 阴影效果 */
+    padding: 10px;
+  }
+</style>
+        
+</head>
+<body class="vscode-body vscode-light">
+  
+<ul>
+  <h1 class="authorcenter">A Controllable Emotion Voice Conversion Framework with Pre-trained Speech Representations</h1>
+    <!-- <p class="authorcenter">Tianrui Wang$^1$, Meng Ge$^1$, Zhikang Niu$^2$, Chunyu Qiang$^1$, Cheng Gong$^1$, Ziyang Ma$^2$, Xiaobao Wang$^1$,\\Xie Chen$^2$, Longbiao Wang$^1$, Jianwu Dang$^3$</p> -->
+  <p class="abstract">
+    <b>Abstract.</b> 
+    Speech disentanglement is crucial for tasks like controllable speech synthesis, voice conversion, and speech emotion conversion. While many self-supervised or weak supervised speech pre-trained models have shown remarkable performance in speech recognition and speaker identification, their potential for speech disentanglement remains underexplored. Typically, speech pre-trained models used in speech synthesis focus on extracting strong task-specific representations, often overlooking their capacity for speech disentanglement in controllable speech generation. To address this gap, we propose a four-stage decoder model that integrates a speech disentanglement module, progressive generator, acoustic compensator, and flow predictor, leveraging the layer-wise task characteristics of pre-trained models and enabling controllable emotion and voice conversion with any pre-trained speech encoder. We evaluate this framework using six established speech pre-trained models, and experimental results demonstrate that several pre-trained models significantly outperform baseline methods within our framework on emotion and voice conversion. Moreover, our framework serves as a valuable benchmark for evaluating pre-trained models' capabilities in disentangling emotional state, speaker, and content from speech. We also release our code at <a href="https://github.com/wangtianrui/PM-EVC">https://github.com/wangtianrui/PM-EVC.</a>
+  </div>
+
+<div class="block-style">
+  <h2 style="text-align: center">Model Overview</h2>
+  <img src="./evc.jpg" alt="Audio Image 2" style="width: 60%; display: block; margin: 0 auto;" >
+  <p style="text-align: center">Our four-stage emotional voice conversion framework, trained on self-supervised mel-spectrogram reconstruction, enables emotion and voice conversion (EVC), emotion conversion (EC), and voice conversion (VC) by altering emotional state or speaker representation during inference.</p>
+
+</div>
+  <hr style="height:10px;border:0px dashed #ffffff;" />
+  <hr style="height:1px;border:2px;border-top:2px dashed #555555;" />
+  <div class="row">
+    <h2>Expressive Voice Conversion (Simultaneous Conversion of Emotion and Speaker) </h2>
+    <p>
+      Our framework enables simultaneous <b>conversion of emotion and speaker</b>, with the <b>emotion and speaker originating from different speech samples.</b>
+      <br>
+      <br>
+    </p>
+    <div class="english_vc_examples">
+      <div class="english_vc active" data-page="1">
+        <div class="english_vc_examples">
+          <div class="english_vc active" data-page="1">
+            <table class="table" style="margin-top: 20px;">
+              <thead>
+                <tr>
+                  <!-- 第一行，合并的cell -->
+                  <th colspan="3"></th> <!-- 合并Source Speech和Target Speaker的两列 -->
+                  <th colspan="2">Pre-trained Model Under Our Framework</th> <!-- 合并ProgRE到Whisper的六列 -->
+                  <th colspan="3">Baseline methods</th> <!-- 合并ConsistencyVC和Wav2vec-VC的两列 -->
+              </tr>
+                <tr>
+                  <!-- <th> </th> -->
+                  <th>Source Speech (Happy)</th>
+                  <th>Target Speaker (Fear)</th>
+                  <th>Target Emotion (Natural)</th>
+                  <th><b>ProgRE</b></th>
+                  <th><a >Wav2vec2.0</a></th>
+                  <th><a >ConsistencyEVC</a></th>
+                  <th><a >FACodec</a></th>
+                  <th><a >Wav2vec2.0-EVC</a></th>
+                </tr>
+              </thead>
+              <tbody id="">
+                <tr>
+                  <!-- <th>same speaker between<br>source and target</th> -->
+                  <td><audio src="./audios/evc_source.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/2_evc_tgt_0.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/2_evc_tgt_e.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/0-ProgRE/evc.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/1-W2V/evc.wav" controls="" style="width:230px"></audio></td>
+                  <td>This task is not supported</td>
+                  <td><audio src="./audios/5-FACODEC/evc.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/4-W2VEVC/evc.wav" controls="" style="width:230px"></audio></td>
+                </tr>
+                <tr class="no-border">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <b>Ablation Study 1 (Without AC)</b>
+                    <br>
+                    <br>
+                    <audio src="./audios/2-ProgRE-AP/evc.wav" controls="" style="width:230px"></audio>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr class="no-border">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <b>Ablation Study 2 (Without Progressive Manner)</b>
+                    <br>
+                    <br>
+                    <audio src="./audios/3-ProgRE-PM/evc.wav" controls="" style="width:230px"></audio>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <!-- <tbody id="">
+                <tr>
+                  <th>different speaker between<br>source and target</th>
+                  <td><audio src="./audios/MSP-PODCAST_2894_0284.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/0016_000721.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/progre/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/data2vec/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/hubert/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/wav2vec/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/wavlm/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/whisper/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/consis_vc/MSP-PODCAST_2894_0284_to_0016_000721.wav" controls="" style="width:230px"></audio></td>
+                  <td><audio src="./audios/ec/wav2vec_vc/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+                </tr>
+                
+              </tbody> -->
+            </table>
+      </div>
+    </div>
+  </div>
+  
+  
+  <hr style="height:10px;border:0px dashed #ffffff;" />
+  <hr style="height:1px;border:2px;border-top:2px dashed #555555;" />
+<div class="row">
+  <h2>Voice Conversion</h2>
+  <p>
+    Our framework <b>enables stable voice conversion</b> while <b>preserving the original emotional state</b>.
+    <br>
+    <br>
+  </p>
+  <div class="english_vc_examples">
+    <div class="english_vc active" data-page="1">
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          <tr>
+            <!-- 第一行，合并的cell -->
+            <th colspan="2"></th> <!-- 合并Source Speech和Target Speaker的两列 -->
+            <th colspan="2"> Pre-trained Model Under Our Framework </th> <!-- 合并ProgRE到Whisper的六列 -->
+            <th colspan="3">Baseline methods</th> <!-- 合并ConsistencyVC和Wav2vec-VC的两列 -->
+        </tr>
+          <tr>
+            <!-- <th></th> -->
+            <th>Source Speech</th>
+            <th>Target Speaker</th>
+            <th><b>ProgRE</b></th>
+            <th><a >Wav2vec2.0</a></th>
+            <th><a >ConsistencyEVC</a></th>
+            <th><a >FACodec</a></th>
+            <th><a >Wav2vec2.0-EVC</a></th>
+
+          </tr>
+        </thead>
+        <tbody id="">
+          <tr>
+            <!-- <th>same emotion between<br>source and target</th> -->
+            <td><audio src="./audios/vc_source.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/vc_tgt.wav" controls="" style="width:230px"></audio></td>
+            <td>
+              <audio src="./audios/0-ProgRE/vc.wav" controls="" style="width:230px"></audio>
+            </td>
+            <td><audio src="./audios/1-W2V/vc.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/6-Consisten/vc.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/5-FACODEC/vc.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/4-W2VEVC/vc.wav" controls="" style="width:230px"></audio></td>
+          </tr>
+          
+          <tr class="no-border">
+            <td></td>
+            <td></td>
+            <td>
+              <b>Ablation Study 1 (Without AC)</b>
+              <br>
+              <br>
+              <audio src="./audios/2-ProgRE-AP/vc.wav" controls="" style="width:230px"></audio>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr class="no-border">
+            <td></td>
+            <td></td>
+            <td>
+              <b>Ablation Study 2 (Without Progressive Manner)</b>
+              <br>
+              <br>
+              <audio src="./audios/3-ProgRE-PM/vc.wav" controls="" style="width:230px"></audio>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<hr style="height:10px;border:0px dashed #ffffff;" />
+<hr style="height:1px;border:2px;border-top:2px dashed #555555;" />
+
+<div class="row">
+  <h2>Emotion Conversion</h2>
+  <p>
+    Our framework enables stable global emotion state conversion</b> while <b>preserving the original speaker identification</b>.
+    <br>
+    <em>Please note that our definition of emotional state is at the utterance level and does not affect speech duration. Instead, it is primarily reflected in stress and pitch variations.</em>
+    <br>
+  </p>
+  <div class="english_vc_examples">
+    <div class="english_vc active" data-page="1">
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          <tr>
+            <!-- 第一行，合并的cell -->
+            <th colspan="2"></th> <!-- 合并Source Speech和Target Speaker的两列 -->
+            <th colspan="2">Pre-trained Model Under Our Framework</th> <!-- 合并ProgRE到Whisper的六列 -->
+            <th colspan="3">Baseline methods</th> <!-- 合并ConsistencyVC和Wav2vec-VC的两列 -->
+        </tr>
+          <tr>
+            <!-- <th> </th> -->
+            <th>Source Speech (Happy)</th>
+            <th>Target Emotion (Natural)</th>
+            <th><b>ProgRE</b></th>
+            <th><a >Wav2vec2.0</a></th>
+            <th><a >ConsistencyEVC</a></th>
+            <th><a >FACodec</a></th>
+            <th><a >Wav2vec2.0-EVC</a></th>
+          </tr>
+        </thead>
+        <tbody id="">
+          <tr>
+            <!-- <th>same speaker between<br>source and target</th> -->
+            <td><audio src="./audios/evc_source.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec_tgt.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/0-ProgRE/ec.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/1-W2V/ec.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/6-consisten/ec.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/5-FACODEC/ec.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/4-W2VEVC/ec.wav" controls="" style="width:230px"></audio></td>
+          </tr>
+          <tr class="no-border">
+            <td></td>
+            <td></td>
+            <td>
+              <b>Ablation Study 1 (Without AC)</b>
+              <br>
+              <br>
+              <audio src="./audios/2-ProgRE-AP/ec.wav" controls="" style="width:230px"></audio>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr class="no-border">
+            <td></td>
+            <td></td>
+            <td>
+              <b>Ablation Study 2 (Without Progressive Manner)</b>
+              <br>
+              <br>
+              <audio src="./audios/3-ProgRE-PM/ec.wav" controls="" style="width:230px"></audio>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <!-- <tbody id="">
+          <tr>
+            <th>different speaker between<br>source and target</th>
+            <td><audio src="./audios/MSP-PODCAST_2894_0284.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/0016_000721.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/progre/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/data2vec/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/hubert/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/wav2vec/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/wavlm/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/whisper/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/consis_vc/MSP-PODCAST_2894_0284_to_0016_000721.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/ec/wav2vec_vc/emo_cv_fbank.wav" controls="" style="width:230px"></audio></td>
+          </tr>
+          
+        </tbody> -->
+      </table>
+    </div>
+  </div>
+</div>
+
+<hr style="height:10px;border:0px dashed #ffffff;" />
+<hr style="height:1px;border:2px;border-top:2px dashed #555555;" />
+
+
+
+<!-- <div class="row">
+  <h2>Reconstruction</h2>
+  <p>
+    Our framework reliably reconstructs high-quality speech based on intermediate representations. This allows for the integration of vector quantization to encode the content and the Transformer encoder's input, both of which are frame-level representations, enabling controllable speech synthesis.
+    <br>
+    <br>
+  </p>
+  <div class="english_vc_examples">
+    <div class="english_vc active" data-page="1">
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          <tr>
+            <th colspan="1"></th> 
+            <th colspan="6">24-layer Pre-trained Model Under Our Framework</th>
+            <th colspan="2">Baseline methods</th>
+        </tr>
+          <tr>
+            <th>Source Speech</th>
+            <th><b>ProgRE</b></th>
+            <th><a >Data2vec</a></th>
+            <th><a >HuBERT</a></th>
+            <th><a >Wav2vec2.0</a></th>
+            <th><a >WavLM</a></th>
+            <th><a >Whisper</a></th>
+            <th><a >ConsistencyVC</a></th>
+            <th><a >Wav2vec-VC</a></th>
+          </tr>
+        </thead>
+        <tbody id="">
+          <tr>
+            <td><audio src="./audios/rec/MSP-PODCAST_1671_0025_0016.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/progre/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/data2vec/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/hubert/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/wav2vec/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/wavlm/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/whisper/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/consis_vc/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/wav2vec_vc/2_MSP-PODCAST_1671_0025_0016_srcspkmsp-924_tgtspkmsp-924_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+          </tr>
+          
+        </tbody>
+        <tbody id="">
+          <tr>
+            <td><audio src="./audios/rec/002.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/progre/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/data2vec/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/hubert/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/wav2vec/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/wavlm/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/whisper/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/consis_vc/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+            <td><audio src="./audios/rec/wav2vec_vc/3_002_srcspkmead-M026_tgtspkmead-M026_srcemohappy_tgtemohappy.wav" controls="" style="width:230px"></audio></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<hr style="height:10px;border:0px dashed #ffffff;" />
+<hr style="height:1px;border:2px;border-top:2px dashed #555555;" /> -->
+
+<!-- <h2>Performance of Flow Predictor</h2>
+  <p>
+    The addition of the flow predictor significantly enhances perceptual quality, but it reduces the recognition accuracy of the Whisper model. We hypothesize that this is similar to the artificial artifacts introduced by speech enhancement in robust ASR, as the flow matching process is akin to noise reduction.
+    <br>
+    <br>
+  </p>
+  <div class="english_vc_examples">
+    <div class="english_vc active" data-page="1">
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          
+          <tr>
+            <th>without Flow Predictor</th>
+            <th><b>with Flow Predictor</b></th>
+          </tr>
+        </thead>
+        <tbody id="">
+          <tr>
+            <td><img src="./audios/abs/1nfm.png" alt="Audio Image 2" style="width:350px; height:200px;"><br>lab: THAT IS ALL I GOT TO SAY ON THAT I AM TIRED OF IT IT IS IRRITATING IT IS VERY CORNY TO ME <br>rec: THAT IS ALL I GOT TO SAY ON THAT I AM TIRED OF IT IT IS IRRITATING IT IS VERY CORNY TO ME<br>WER by Whisper Large V3: <b>0.0%</b> </td>
+            <td><img src="./audios/abs/1fm.png" alt="Audio Image 1" style="width:350px; height:200px;"><br>lab: THAT IS ALL I&nbsp;&nbsp;&nbsp;&nbsp;GOT TO SAY ON THAT I AM TIRED OF IT IT IS IRRITATING IT IS VERY CORNY TO ME <br>rec: THAT IS ALL THAT IS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ON&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I AM TIRED OF IT IT IS IRRITATING IT IS VERY CORNY TO ME<br>WER by Whisper Large V3: <b>21.74 %</b></td>
+        </tr>
+        <tr>
+          <td><audio src="./audios/abs/635_MSP-PODCAST_3561_0400_srcspkmsp-1765_tgtspkmsp-1765_srcemoneutral_tgtemoneutral-nfm.wav" controls="" style="width:350px"></audio></td>
+          <td><audio src="./audios/abs/635_MSP-PODCAST_3561_0400_srcspkmsp-1765_tgtspkmsp-1765_srcemoneutral_tgtemoneutral-fm.wav" controls="" style="width:350px"></audio></td>
+        </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="english_vc_examples">
+    <div class="english_vc active" data-page="1">
+      <table class="table" style="margin-top: 20px;">
+        <thead>
+          
+          <tr>
+            <th>without Flow Predictor</th>
+            <th><b>with Flow Predictor</b></th>
+          </tr>
+        </thead>
+        <tbody id="">
+          <tr>
+            <td><img src="./audios/abs/2nfm.png" alt="Audio Image 2" style="width:350px; height:200px;"><br>lab: THOSE MUSICIANS HARMONIZE MARVELOUSLY<br>rec: THOSE MUSICIANS HARMONIZE MARVELOUSLY<br>WER by Whisper Large V3: <b>0.0%</b> </td>
+            <td><img src="./audios/abs/2fm.png" alt="Audio Image 1" style="width:350px; height:200px;"><br>lab: THOSE MUSICIANS HARMONIZE MARVELOUSLY<br>rec: THOSE MUSICIANS HARMONIZE MERRILY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>WER by Whisper Large V3: <b>25.0%</b></td>
+        </tr>
+        <tr>
+          <td><audio src="./audios/abs/134_004_srcspkmead-W038_tgtspkmead-W038_srcemohappy_tgtemohappy-nfm.wav" controls="" style="width:350px"></audio></td>
+          <td><audio src="./audios/abs/134_004_srcspkmead-W038_tgtspkmead-W038_srcemohappy_tgtemohappy-fm.wav" controls="" style="width:350px"></audio></td>
+        </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</li>
+</ul> -->
+
+            
+            
 </body>
 </html>

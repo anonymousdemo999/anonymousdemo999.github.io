@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
+    <link href="style.css" rel="stylesheet">
+    <meta charset="utf-8">
+
+    <title>demo</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1091.0" data-gr-ext-installed="">
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+        }
+
+        td:nth-child(4),
+        th:nth-child(4) {
+            position: relative;
+        }
+
+        td:nth-child(4)::after,
+        th:nth-child(4)::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1px;
+            /* 线的宽度 */
+            height: 100%;
+            background-color: rgb(219, 207, 207);
+            transform: translateX(5px);
+            /* 相当于“右边padding” */
+        }
+
+        .highlight-line {
+            color: #0b6623;
+            /* 深绿色 */
+            font-weight: bold;
+            background-color: #e6f4ea;
+        }
+    </style>
+    <div class="container">
+        <header role="banner">
+        </header>
+        <main role="main">
+            <article itemscope itemtype="https://schema.org/BlogPosting">
+
+
+
+                <div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+                    <div class="column has-text-centered">
+                        <!-- <h1 class="title is-1 publication-title"> <b>WeSCon:</b>  </h1> -->
+                        <h3 class="title is-2 publication-title"> <b>CEAEval: Context-Aware Evaluation of Expressiveness
+                                Appropriateness in Speech</b></h3>
+                    </div>
+                    <br>
+
+                    <div class="column has-text-centered">
+
+
+                        <span class="link-block">
+                            <a href="https://anonymous.4open.science/r/Eval-DA0C" target="_blank"
+                                class="external-link button is-normal is-rounded is-dark">
+                                <span class="icon">
+                                    <i class="fab fa-github"></i>
+                                </span>
+                                <span>Codes are temporarily open-sourced anonymously.</span>
+                            </a>
+                        </span>
+                    </div>
+
+
+
+
+                </div>
+
+
+                <div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+                    <div class="columns is-centered has-text-centered">
+                        <div class="column is-six-fifths">
+                            <h2 class="title is-3">Overview</h2>
+                        </div>
+                    </div>
+                    <p style="font-size: 18px;">
+                        Evaluating expressive speech becomes increasingly important as speech technologies advance;
+                        however, existing systems mainly assess emotional intensity and overlook whether a speech sample
+                        is expressively appropriate for its contextual setting. To address this limitation, we propose
+                        CEAEval, a context-aware framework for assessing speech expressive appropriateness.
+                        We first define the task of context-aware expressive appropriateness evaluation, which
+                        determines whether a speech sample expressively aligns with the content, situational context,
+                        and narrative intent under a given rich context.
+                        We then construct the first context-rich speech dataset for this task, CEAEval-D, which provides
+                        narrative descriptions together with fourteen categories of human annotations covering
+                        expressive attributes and overall appropriateness.
+                        Finally, we develop CEAEval-M, a model that integrates knowledge distillation, multi-model
+                        collaboration, audio attention biasing, and reinforcement learning to perform context-aware
+                        expressive appropriateness evaluation. Experiments on a human-annotated test set show that
+                        CEAEval-M outperforms existing speech evaluation and analysis systems. All data, models, and
+                        code are released at https://anonymous.4open.science/r/Eval-DA0C.
+                    </p>
+                </div>
+
+                <div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+                    <div class="columns is-centered has-text-centered">
+                        <div class="column is-six-fifths">
+                            <h2 class="title is-3">Task Define</h2>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <!-- 第一张图片单独一行 -->
+                        <img id="teaser" width="60%" src="imgs/intro.png">
+                        <p style="font-style: italic; margin-top: 8px;">
+                            <b>Figure 1.</b>
+                            A narrative example illustrating how expressive intent emerges from conversational context.
+                        </p>
+
+                    </div>
+
+                    <br><br>
+                    <p style="font-size: 18px;">
+                        As illustrated in Figure 1, the task of evaluating speech expressive appropriateness under rich
+                        contextual settings aims to assess whether a speech sample appropriately conveys expressiveness
+                        given a rich narrative context and a corresponding spoken utterance. The expressiveness
+                        appropriateness is rated on a scale from 0 to 5. In addition, the model produces a coherent
+                        reasoning process, including the analysis of paralinguistic cues, such that the resulting scores
+                        and rationales can serve as references for other expressive speech tasks.
+                    </p>
+                </div>
+
+
+                <div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+                    <div class="columns is-centered has-text-centered">
+                        <div class="column is-six-fifths">
+                            <h2 class="title is-3">CEAEval-D: Dataset</h2>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <!-- 第一张图片单独一行 -->
+                        <img id="teaser" width="100%" src="imgs/data_show.png">
+                        <p style="font-style: italic; margin-top: 8px;">
+                            <b>Figure 2.</b>
+                            Statistical distribution of annotation categories and attributes in the CEAEval-D dataset.
+                        </p>
+
+                    </div>
+
+                    <br><br>
+                    <p style="font-size: 18px;">
+                        We recruit 18 graduate students with backgrounds in speech emotion research to annotate the
+                        selected 16.1 hours of data. The annotations cover multiple aspects, including speech segment
+                        boundaries, speaker identity, textual content, expressive appropriateness scores, intonation,
+                        rhythm, emotion categories, recording conditions, the presence of background music, synthesis
+                        difficulty when treated as a text-to-speech task, speaker gender and age, as well as
+                        paralinguistic vocalizations and sound events. Detailed statistics of the annotated attributes
+                        are illustrated in Figure 2.
+                    </p>
+
+                </div>
+
+                <div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+                    <div class="columns is-centered has-text-centered">
+                        <div class="column is-six-fifths">
+                            <h2 class="title is-3">CEAEval-D: Dataset</h2>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <!-- 第一张图片单独一行 -->
+                        <img id="teaser" width="100%" src="imgs/method.png">
+                        <p style="font-style: italic; margin-top: 8px;">
+                            <b>Figure 3.</b>
+                            Overview of the proposed three-stage training pipeline for context-aware speech
+                            expressiveness evaluation.
+                        </p>
+
+                    </div>
+
+                    <br><br>
+                    <p style="font-size: 18px;">
+                        The judge model takes textual context and a speech segment as input and assesses the
+                        appropriateness of speech expressiveness under the given context. The overall training pipeline
+                        is illustrated in Figure 3.
+                        First, we distill audio description capabilities from Qwen3-Captioner using 3,505 hours of
+                        unlabeled speech data. We then introduce the Qwen3-8B LLM to predict ideal speech expressiveness
+                        based solely on textual context. Building on this, we train a Speech-LLM to score expressive
+                        appropriateness by performing chain-of-thought (CoT) style comparisons between the predicted
+                        ideal expressiveness and the evaluated speech, under an attention biasing mechanism. Finally, we
+                        apply reinforcement learning to further improve scoring accuracy. Through this three-stage
+                        training procedure, the model learns to evaluate speech expressive appropriateness under rich
+                        contextual information.
+                    </p>
+
+
+                    <!-- ================= Case Tabs ================= -->
+                    <div class="container" style="margin-top: 30px; text-align: center;">
+                        <button class="btn btn-primary case-btn active" data-case="1">Demo 1</button>
+                        <button class="btn btn-default case-btn" data-case="2">Demo 2</button>
+                        <button class="btn btn-default case-btn" data-case="3">Demo 3</button>
+                    </div>
+
+                    <!-- ================= Case Content ================= -->
+
+                    <div class="container case-content" data-case-content="1">
+                        <!-- 一个 item -->
+                        <div class="row"
+                            style="border:1px solid #ddd; border-radius:8px; padding:15px; margin-top:20px;"
+                            data-lang-scope>
+
+                            <!-- ===== 语言切换（独立一行，不破坏布局） ===== -->
+                            <div class="col-12" style="text-align:right; margin-bottom:10px;">
+                                <button class="btn btn-xs btn-primary lang-btn" data-lang-target="en">ENGLISH</button>
+                                <button class="btn btn-xs btn-default lang-btn" data-lang-target="zh">中文</button>
+                            </div>
+                            <!-- ===== 左边：文字列表 ===== -->
+                            <div class="col-md-6">
+                                <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                                    <strong style="display:block; margin-bottom:8px; margin-left:16px;">
+                                        Narrative Context (Context Size = 9):
+                                    </strong>
+
+                                    <!-- ===== English (default) ===== -->
+                                    <ul class="list-group lang-block" data-lang="en">
+                                        <li class="list-group-item">Line 1: Jin Dangui wrapped her arms around his neck.
+                                        </li>
+                                        <li class="list-group-item">Line 2: Jin Dangui said: “We live and die together.
+                                            Don’t you think that’s good?”</li>
+                                        <li class="list-group-item">Line 3:
+                                            Liu Da felt as if he were in a dream. He murmured a response, yet deep down
+                                            he sensed something was amiss. Hiss—someone seemed to have died. Who had
+                                            died? The beauty in his arms was vivid and alluring. Oh, right—the man
+                                            surnamed Huo had said that her face was carved out. How could such a
+                                            beautiful face be fake?
+                                        </li>
+                                        <li class="list-group-item">Line 4:
+                                            Thinking of Huo Zhenye made him think of Bai Zhun, and a vague sense of
+                                            doubt arose in his heart. There was something wrong with the scent of this
+                                            French perfume—the fragrance had gone too far and turned into a rotten
+                                            stench.
+                                        </li>
+                                        <li class="list-group-item">Line 5: Liu Da said: “You’re dead!”</li>
+                                        <li class="list-group-item">Line 6:
+                                            The Western-style spring bed was gone. There were no lights in the room, and
+                                            no music either. Jin Dangui’s hands hooked around his neck, wet and icy
+                                            cold. That face which had utterly bewitched him was right before his
+                                            eyes—two bloody hollows where the eyes should be, stuffed with a new pair of
+                                            eyeballs. But these eyeballs were not original; from time to time, they
+                                            would slip out of their sockets. Whenever they fell out, Jin Dangui would
+                                            use her fingers to push them back in.
+                                        </li>
+                                        <li class="list-group-item">Line 7: Liu Da said: “Ah!”</li>
+                                        <li class="list-group-item">Line 8:
+                                            Liu Da suddenly snapped back to his senses and let out a shrill scream. Jin
+                                            Dangui’s face darkened.
+                                        </li>
+                                        <li class="list-group-item highlight-line">Target Line:
+                                            Jin Dangui said: “What? I specifically went out of my way to find this pair
+                                            of eyeballs for you. They were obtained in exchange for earrings.”
+                                        </li>
+                                    </ul>
+
+                                    <!-- ===== Chinese ===== -->
+                                    <ul class="list-group lang-block" data-lang="zh" style="display:none;">
+                                        <li class="list-group-item">Line 1: 金丹桂环住了他的脖子。</li>
+                                        <li class="list-group-item">Line 2: 金丹桂说：咱们生死都在一起，你说好不好嘛？</li>
+                                        <li class="list-group-item">Line 3:
+                                            柳大如梦如幻，嘴里应了一声，可心里又隐隐觉得不稳当。嘶，好像有人死了，是谁死了呢？怀里美人活色生香，哦，对了，那姓霍的还说什么她的脸是割出来的，这么美的脸怎么会是假的呢？
+                                        </li>
+                                        <li class="list-group-item">Line 4: 想到霍震烨，就想到白准，心中隐隐生起疑团。这法国香水的味道不对劲呀，香过了便腐臭难闻。
+                                        </li>
+                                        <li class="list-group-item">Line 5: 柳大说：你死了！</li>
+                                        <li class="list-group-item">Line 6:
+                                            西洋弹簧床不见了，屋里没灯，也没有音乐，金丹桂勾在他脖子上的手，又湿又冷。那张让他神魂颠倒的脸就在他眼前，脸上两只血窟窿，用对新眼珠填住。可这对眼珠子不是原装的，按在眼眶里时不时就要掉出来。一掉下来，金丹桂就用手指头再把眼珠塞回去。
+                                        </li>
+                                        <li class="list-group-item">Line 7: 柳大说：啊！</li>
+                                        <li class="list-group-item">Line 8: 柳大怵然回神，惊声尖叫，金丹桂沉下脸</li>
+                                        <li class="list-group-item highlight-line">Target Line:
+                                            金丹桂说：怎么？我为了你特意找来这一对眼珠子，那可是拿耳环换来的。</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- ===== 右边：音频 + 模型输出 ===== -->
+                            <div class="col-md-6">
+
+                                <!-- 下：模型输出 -->
+                                <div style="background:#f8f9fa; padding:10px; border-radius:6px;">
+                                    <strong>Expressive Planner Output:</strong>
+
+                                    <p class="lang-block" data-lang="en">
+                                        The ideal performance in this context is:
+                                        {
+                                        "emotion": "anger",
+                                        "rhythm": "solemn",
+                                        "intonation": "falling intonation",
+                                        "recording condition": "normal speech"
+                                        }
+                                    </p>
+
+                                    <p class="lang-block" data-lang="zh" style="display:none;">
+                                        在这个语境下的理想表现为：
+                                        {
+                                        "emotion": "愤怒",
+                                        "rhythm": "凝重型",
+                                        "intonation": "下降调",
+                                        "recording condition": "正常说话"
+                                        }
+                                    </p>
+                                </div>
+
+
+                                <!-- 上：音频 -->
+                                <div style="margin-bottom: 15px; margin-top: 15px; padding: 10px">
+                                    <strong>Speech of Target Line:</strong>
+                                    <audio controls style="width: 100%;">
+                                        <source src="wavs/sample1.wav" type="audio/wav">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+
+                                <div style="background:#f8f9fa; padding:10px; border-radius:6px;">
+                                    <strong>Judge Model Output:</strong>
+
+                                    <p class="lang-block" data-lang="en">
+                                        The ideal emotion is anger, while the actual performance conveys doubt and
+                                        impatience. Although the emotional direction is not completely aligned, doubt
+                                        and impatience likewise express a strong sense of dissatisfaction, resulting in
+                                        an emotion score of 4.5.
+                                        In terms of rhythm, the ideal style is solemn, whereas the actual delivery is
+                                        high-pitched. Although the rhythm types differ, a high-pitched rhythm can also
+                                        convey strong emotion, yielding a rhythm score of 4.5.
+                                        The ideal intonation is falling, while the actual intonation is curved. A curved
+                                        intonation enhances expressiveness and adds vocal nuance, resulting in an
+                                        intonation score of 4.5. The ideal sound effect is normal speech, which matches
+                                        the actual performance, leading to a sound effect score of 5.0.
+                                        Overall, although the actual performance differs from the ideal in certain
+                                        details, it effectively conveys the emotion and intent of the line as a whole
+                                        and demonstrates strong expressiveness. I assign a final score of 5.0.
+                                    </p>
+
+                                    <p class="lang-block" data-lang="zh" style="display:none;">
+                                        理想情感为愤怒，实际表现为质疑和不耐烦，虽然情感方向不完全一致，但质疑和不耐烦同样传达了强烈的不满情绪，情感得分：4.5。
+                                        在韵律方面，理想为凝重型，实际为高亢，虽然节奏类型不同，但高亢的节奏同样能够传达出强烈的情感，韵律得分：4.5。
+                                        语调理想为下降调，实际为弯曲，弯曲的语调能够增加语音的表现力和层次感，语调得分：4.5。 音效理想为正常说话，实际表现一致，音效得分：5.0。
+                                        综合来看，实际表现虽然在细节上与理想表现有所不同，但整体上能够很好地传达出台词的情感和意图，表现力出色。我打分5.0分。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container case-content" data-case-content="2" style="display:none;">
+                        <!-- 一个 item -->
+                        <div class="row"
+                            style="border:1px solid #ddd; border-radius:8px; padding:15px; margin-top:20px;"
+                            data-lang-scope>
+
+                            <!-- ===== 语言切换（独立一行，不破坏布局） ===== -->
+                            <div class="col-12" style="text-align:right; margin-bottom:10px;">
+                                <button class="btn btn-xs btn-primary lang-btn" data-lang-target="en">ENGLISH</button>
+                                <button class="btn btn-xs btn-default lang-btn" data-lang-target="zh">中文</button>
+                            </div>
+                            <!-- ===== 左边：文字列表 ===== -->
+                            <div class="col-md-6">
+                                <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                                    <strong style="display:block; margin-bottom:8px; margin-left:16px;">
+                                        Narrative Context (Context Size = 5):
+                                    </strong>
+
+                                    <!-- ===== English (default) ===== -->
+                                    <ul class="list-group lang-block" data-lang="en">
+                                        <li class="list-group-item">Line 1: Lin Nianlei said: “Ah, it’s really warm.”
+                                        </li>
+                                        <li class="list-group-item">Line 2: Qin Yu said nothing more and continued
+                                            walking forward at a steady pace. Wearing gloves, Lin Nianlei brushed her
+                                            hands over the icicles hanging from the windowsills of the houses, then
+                                            suddenly shouted.</li>
+                                        <li class="list-group-item">Line 3: Lin Nianlei said: “You big dummy.”</li>
+                                        <li class="list-group-item">Line 4: Qin Yu said: “What?”</li>
+                                        <li class="list-group-item highlight-line">Target Line:
+                                            Lin Nianlei said: “Cheer up. What’s already happened can’t be changed by
+                                            anyone. But since we live in such a time, we should always believe that
+                                            tomorrow will be beautiful.”
+                                        </li>
+
+                                    </ul>
+
+                                    <!-- ===== Chinese ===== -->
+                                    <ul class="list-group lang-block" data-lang="zh" style="display:none;">
+                                        <li class="list-group-item">Line 1: 林念蕾说：啊，真暖和啊。</li>
+                                        <li class="list-group-item">Line 2: 秦禹没再吭声，步平适中地向前走着，林念蕾戴着手套，摸着各家窗台上的冰柱，突然喊了一声。
+                                        </li>
+                                        <li class="list-group-item">Line 3: 林念蕾说：大傻个。</li>
+                                        <li class="list-group-item">Line 4: 秦禹说：干嘛？</li>
+                                        <li class="list-group-item highlight-line">Target Line:
+                                            林念蕾说：开心一点嘛。已经过去的事，谁也没有办法改变。但我们活在这样的时代，总要相信明天是美好的。</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- ===== 右边：音频 + 模型输出 ===== -->
+                            <div class="col-md-6">
+
+                                <!-- 下：模型输出 -->
+                                <div style="background:#f8f9fa; padding:10px; border-radius:6px;">
+                                    <strong>Expressive Planner Output:</strong>
+
+                                    <p class="lang-block" data-lang="en">
+                                        The ideal performance in this context is: { "emotion": "gentle", "rhythm": "soothing", "intonation": "rising intonation", "recording condition": "normal speech" }
+                                    </p>
+
+                                    <p class="lang-block" data-lang="zh" style="display:none;">
+                                        在这个语境下的理想表现为:{ "emotion": "温柔", "rhythm": "舒缓型", "intonation": "上扬调", "recording
+                                        condition": "正常说话" }
+                                    </p>
+                                </div>
+
+
+                                <!-- 上：音频 -->
+                                <div style="margin-bottom: 15px; margin-top: 15px; padding: 10px">
+                                    <strong>Speech of Target Line:</strong>
+                                    <audio controls style="width: 100%;">
+                                        <source src="wavs/sample2.wav" type="audio/wav">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+
+                                <div style="background:#f8f9fa; padding:10px; border-radius:6px;">
+                                    <strong>Judge Model Output:</strong>
+
+                                    <p class="lang-block" data-lang="en">
+                                        The ideal emotion is gentleness, while the actual performance conveys comfort, encouragement, and calmness. The emotional direction is consistent and naturally expressive, resulting in an emotion score of 4.2.
+                                        In terms of rhythm, the ideal style is soothing, while the actual delivery is light and lively, with smooth pacing and well-placed pauses, yielding a rhythm score of 4.0.
+                                        The ideal intonation is rising, while the actual intonation is curved. Although the intonation pattern does not exactly match, it is rich and appropriate to the context, resulting in an intonation score of 4.1. The ideal sound effect is normal speech, and the actual performance is also normal speech, with good overall clarity, leading to a sound effect score of 4.0.
+                                        In addition, inhalation sounds appear in the speech and are naturally integrated into the context, further enhancing emotional expression. Overall, the performance is natural and fluent, with minor shortcomings in detail. I assign a final score of 4.0.
+                                    </p>
+
+                                    <p class="lang-block" data-lang="zh" style="display:none;">
+                                        理想情感为温柔，实际表现为安慰、鼓励、平静，情感方向一致且自然传神，情感得分：4.2。
+                                        在韵律方面，理想为舒缓型，实际为轻快，节奏流畅且停顿合理，韵律得分：4.0。
+                                        语调理想为上扬调，实际为弯曲，语调变化虽然不匹配但是丰富且符合语境，语调得分：4.1。 音效理想为正常说话，实际也为正常说话，整体清晰度良好，音效得分：4.0。
+                                        此外，语音中出现了吸气声，自然融入语境，进一步强化了情感表达。综合来看，整体表现自然流畅，细节略有不足。我打分为4.0分。
+                                    </p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container case-content" data-case-content="3" style="display:none;">
+                        <!-- 一个 item -->
+                        <div class="row"
+                            style="border:1px solid #ddd; border-radius:8px; padding:15px; margin-top:20px;"
+                            data-lang-scope>
+
+                            <!-- ===== 语言切换（独立一行，不破坏布局） ===== -->
+                            <div class="col-12" style="text-align:right; margin-bottom:10px;">
+                                <button class="btn btn-xs btn-primary lang-btn" data-lang-target="en">ENGLISH</button>
+                                <button class="btn btn-xs btn-default lang-btn" data-lang-target="zh">中文</button>
+                            </div>
+                            <!-- ===== 左边：文字列表 ===== -->
+                            <div class="col-md-6">
+                                <div style="background: #f8f9fa; padding: 10px; border-radius: 6px;">
+                                    <strong style="display:block; margin-bottom:8px; margin-left:16px;">
+                                        Narrative Context (Context Size = 15):
+                                    </strong>
+
+                                    <!-- ===== English (default) ===== -->
+                                    <ul class="list-group lang-block" data-lang="en">
+                                        <li class="list-group-item">Line 1: The informant said: “So impatient?”</li>
+                                        <li class="list-group-item">Line 2: The informant let out a laugh.</li>
+                                        <li class="list-group-item">Line 3:
+                                            Qiu Mang said: “We had an agreement. I pass intelligence to you, and in return you arrange a new identity for me, get me out of Black Sea City, and give me a bottle of divine blood. That’s what I’m owed. I took enormous risks, and I deserve a reward of equal value. You’re not thinking of going back on your word, are you?”
+                                        </li>
+                                        <li class="list-group-item">Line 4: The informant said: “We always keep our promises.”</li>
+                                        <li class="list-group-item">Line 5: The informant took out a test tube filled with a dark red liquid from his coat.</li>
+                                        <li class="list-group-item">Line 6: The informant said: “This is your payment.”</li>
+                                        <li class="list-group-item">Line 7:
+                                            Qiu Mang’s gaze locked firmly onto the test tube. He stepped forward and raised his hand to take it, but the informant’s hand holding the tube shifted slightly, dodging Qiu Mang’s movement. His eyes hardened, and his voice sank.
+                                        </li>
+                                        <li class="list-group-item">Line 8: Qiu Mang said: “What do you mean by this? We agreed that you would advance the payment of divine blood.”</li>
+                                        <li class="list-group-item">Line 9: The informant said: “Hmph, don’t be so tense, Qiu Mang. I told you—we will keep our promise.”</li>
+                                        <li class="list-group-item">Line 10: The informant smiled and said soothingly.</li>
+                                        <li class="list-group-item">Line 11: The informant said: “There’s just one small matter I need you to take care of.”</li>
+                                        <li class="list-group-item">Line 12:
+                                            Qiu Mang said: “Heh. Do you remember how you negotiated with me last time? It’s only been a few hours and you’ve already forgotten? You said I wouldn’t need to work for you—just focus on passing on intelligence.”
+                                        </li>
+                                        <li class="list-group-item">Line 13: The informant said: “Sorry. This is an order my superior just gave me. I don’t have the authority to refuse it on your behalf.”</li>
+                                        <li class="list-group-item">Line 14: The informant offered an apology devoid of sincerity.</li>
+                                        <li class="list-group-item highlight-line">Target Line: Qiu Mang said: “Then may I ask—do I myself have the right to refuse?”</li>
+
+                                    </ul>
+
+                                    <!-- ===== Chinese ===== -->
+                                    <ul class="list-group lang-block" data-lang="zh" style="display:none;">
+                                        <li class="list-group-item">Line 1: 线人说：这么迫不及待吗？</li>
+                                        <li class="list-group-item">Line 2: 线人笑了一声。</li>
+                                        <li class="list-group-item">Line 3:
+                                            球蟒说：我们约定好的，我给你们传递情报，报酬是给我安排新的身份，让我离开黑海市，以及一瓶神血。这是我应得的。我承受了那么大的风险，理应获得同等价值的回报，你们不会是想反悔吧？
+                                        </li>
+                                        <li class="list-group-item">Line 4: 线人说：我们这边一向信守承诺。</li>
+                                        <li class="list-group-item">Line 5: 线人从怀中掏出来一支装满暗红色液体的试剂管。</li>
+                                        <li class="list-group-item">Line 6: 线人说：这是你的报酬。</li>
+                                        <li class="list-group-item">Line 7:
+                                            球蟒的目光牢牢锁定了试剂管，他上前一步，抬手去接，线人拿着试剂管的手却微微一动，错开了球蟒的动作。他眼神凝住了，声音沉了下来。</li>
+                                        <li class="list-group-item">Line 8: 球蟒说：你这是什么意思？我们商量好了，你们要预支神血的报酬。</li>
+                                        <li class="list-group-item">Line 9: 线人说：哼，不要那么紧张，球蟒，我说了，我们会信守承诺。</li>
+                                        <li class="list-group-item">Line 10: 线人笑了笑，安抚地说。</li>
+                                        <li class="list-group-item">Line 11: 线人说：只是有一件小小的事，需要你去办。</li>
+                                        <li class="list-group-item">Line 12:
+                                            球蟒说：呵，你上次是怎么跟我打商量的，才几个小时就忘掉了吗？你说我不用为你们做事，专心传递情报就行了。</li>
+                                        <li class="list-group-item">Line 13: 线人说：抱歉，这是我这边的上司刚对我下达的命令，我没有权力替你拒绝。</li>
+                                        <li class="list-group-item">Line 14: 线人毫无诚意地道了歉。</li>
+                                        <li class="list-group-item highlight-line">Target Line: 球蟒说：那么请问，我自己有权力拒绝吗？</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- ===== 右边：音频 + 模型输出 ===== -->
+                            <div class="col-md-6">
+
+                                <!-- 下：模型输出 -->
+                                <div style="background:#f8f9fa; padding:10px; border-radius:6px;">
+                                    <strong>Expressive Planner Output:</strong>
+
+                                    <p class="lang-block" data-lang="en">
+                                        The ideal performance in this context is:
+                                        {
+                                        "emotion": "anger",
+                                        "rhythm": "solemn",
+                                        "intonation": "falling intonation",
+                                        "recording condition": "normal speech"
+                                        }
+
+                                    </p>
+
+                                    <p class="lang-block" data-lang="zh" style="display:none;">
+                                        在这个语境下的理想表现为：
+                                        {
+                                        "emotion": "愤怒",
+                                        "rhythm": "凝重型",
+                                        "intonation": "下降调",
+                                        "recording condition": "正常说话"
+                                        }
+                                    </p>
+                                </div>
+
+
+                                <!-- 上：音频 -->
+                                <div style="margin-bottom: 15px; margin-top: 15px; padding: 10px">
+                                    <strong>Speech of Target Line:</strong>
+                                    <audio controls style="width: 100%;">
+                                        <source src="wavs/sample3.wav" type="audio/wav">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+
+                                <div style="background:#f8f9fa; padding:10px; border-radius:6px;">
+                                    <strong>Judge Model Output:</strong>
+
+                                    <p class="lang-block" data-lang="en">
+                                        The ideal emotion is anger, while the actual performance conveys doubt. Although there is a deviation in emotional direction, both carry a certain degree of negative emotion, resulting in an emotion score of 2.8. In terms of rhythm, the ideal style is solemn, while the actual delivery is low-pitched. The two are relatively close and contribute to some degree of atmosphere building, yielding a rhythm score of 3.2. The ideal intonation is falling, whereas the actual intonation is rising, which does not match the ideal and affects the accuracy of expression, resulting in an intonation score of 2.6. The ideal sound effect is normal speech, and the actual performance is also normal speech, performing well overall, leading to a sound effect score of 3.5. Overall, the performance shows a certain level of effectiveness in emotion, rhythm, and sound effect. Although there are shortcomings in intonation, the overall delivery meets most of the requirements of the ideal performance and demonstrates a natural foundation of expression. I assign a final score of 3.0.
+                                    </p>
+
+                                    <p class="lang-block" data-lang="zh" style="display:none;">
+                                        理想情感为愤怒，实际表现为质疑，虽方向有偏差，但都带有一定的负面情绪，情感得分：2.8。 在韵律方面，理想是凝重型，实际为低沉，较为接近且有一定氛围营造效果，韵律得分：3.2。 语调理想为下降调，实际为上扬，与理想不符，影响了表达的准确性，语调得分：2.6。 音效理想为正常说话，实际也是正常说话，表现良好，音效得分：3.5。 综合来看，整体在情感、韵律和音效上有一定表现，虽语调存在不足，但整体表现符合理想表现的大部分要求，具备自然的表达基础。我最终打分为3.0。
+                                    </p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+
+                        document.querySelectorAll(".lang-btn").forEach(btn => {
+                            btn.addEventListener("click", function () {
+
+                                const targetLang = this.dataset.langTarget;
+                                const scope = this.closest("[data-lang-scope]");
+
+                                // 按钮样式
+                                scope.querySelectorAll(".lang-btn").forEach(b => {
+                                    b.classList.remove("btn-primary");
+                                    b.classList.add("btn-default");
+                                });
+                                this.classList.add("btn-primary");
+                                this.classList.remove("btn-default");
+
+                                // 只切换内容块
+                                scope.querySelectorAll(".lang-block").forEach(block => {
+                                    block.style.display =
+                                        (block.dataset.lang === targetLang) ? "" : "none";
+                                });
+                            });
+                        });
+
+                    });
+                </script>
+
+
+                <script>
+                    var buttons = document.getElementsByClassName("case-btn");
+                    var contents = document.getElementsByClassName("case-content");
+
+                    for (let i = 0; i < buttons.length; i++) {
+                        buttons[i].onclick = function () {
+                            var selected = this.getAttribute("data-case");
+
+                            // 切按钮样式
+                            for (let j = 0; j < buttons.length; j++) {
+                                buttons[j].classList.remove("btn-primary");
+                                buttons[j].classList.add("btn-default");
+                            }
+                            this.classList.remove("btn-default");
+                            this.classList.add("btn-primary");
+
+                            // 切内容显示
+                            for (let k = 0; k < contents.length; k++) {
+                                if (contents[k].getAttribute("data-case-content") === selected) {
+                                    contents[k].style.display = "block";
+                                } else {
+                                    contents[k].style.display = "none";
+                                }
+                            }
+                        };
+                    }
+                </script>
+            </article>
+        </main>
+    </div>
+</body>
